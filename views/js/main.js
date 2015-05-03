@@ -378,7 +378,7 @@ var pizzaElementGenerator = function (i) {
     pizzaContainer.id = "pizza" + i; // gives each pizza element a unique id
     pizzaImageContainer.classList.add("col-md-6");
 
-    pizzaImage.src = "build/pizza-large.png";
+    pizzaImage.src = "images/pizza-large.png";
     pizzaImage.classList.add("img-responsive");
     pizzaImageContainer.appendChild(pizzaImage);
     pizzaContainer.appendChild(pizzaImageContainer);
@@ -552,7 +552,7 @@ function requestTick() {
 }
 
 // Updates the positions of the pizzas and updates the ticking variable
-// so other functions know the update is finished. 
+// so other functions know the update is finished.
 function update() {
     updatePositions();
     ticking = false;
@@ -575,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 0, width = window.screen.width; i < width; i += s) {
             var elem = document.createElement('img');
             elem.className = 'mover';
-            elem.src = "build/pizza.png";
+            elem.src = "images/pizza.png";
             elem.style.left = i + 'px';
             elem.style.top = j + 'px';
             document.querySelector("#movingPizzas1").appendChild(elem);
