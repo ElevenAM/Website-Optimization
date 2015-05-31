@@ -576,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 0, width = window.screen.width; i < width; i += s) {
             var elem = document.createElement('img');
             elem.className = 'mover';
-            elem.src = "images/pizza.png";
+            elem.src = "build/pizza.png";
             elem.style.left = i + 'px';
             elem.style.top = j + 'px';
             document.querySelector("#movingPizzas1").appendChild(elem);
