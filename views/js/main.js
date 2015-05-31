@@ -1,3 +1,23 @@
+/*
+Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
+jank-free at 60 frames per second.
+
+There are two major issues in this code that lead to sub-60fps performance. Can
+you spot and fix both?
+
+
+Built into the code, you'll find a few instances of the User Timing API
+(window.performance), which will be console.log()ing frame rate data into the
+browser console. To learn more about User Timing API, check out:
+http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
+
+Creator:
+Cameron Pittman, Udacity Course Developer
+cameron *at* udacity *dot* com
+*/
+
+// As you may have realized, this website randomly generates pizzas.
+// Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
 pizzaIngredients.meats = [
   "Pepperoni",
@@ -122,10 +142,13 @@ pizzaIngredients.crusts = [
   "Stuffed Crust"
 ];
 
+// Name generator pulled from http://saturdaykid.com/usernames/generator.html
+// Capitalizes first letter of each word
 String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+// Pulls adjective out of array using random number sent from generator
 function getAdj(x) {
     switch (x) {
     case "dark":
@@ -262,6 +285,7 @@ function getNoun(y) {
 var adjectives = ["dark", "color", "whimsical", "shiny", "noise", "apocalyptic", "insulting", "praise", "scientific"]; // types of adjectives for pizza titles
 var nouns = ["animals", "everyday", "fantasy", "gross", "horror", "jewelry", "places", "scifi"]; // types of nouns for pizza titles
 
+// Generates random numbers for getAdj and getNoun functions and returns a new pizza name
 function generator(adj, noun) {
     var adjectives = getAdj(adj);
     var nouns = getNoun(noun);
@@ -271,12 +295,14 @@ function generator(adj, noun) {
     return name;
 };
 
+// Chooses random adjective and random noun
 function randomName() {
     var randomNumberAdj = parseInt(Math.random() * adjectives.length);
     var randomNumberNoun = parseInt(Math.random() * nouns.length);
     return generator(adjectives[randomNumberAdj], nouns[randomNumberNoun]);
 };
 
+// These functions return a string of a random ingredient from each respective category of ingredients.
 var selectRandomMeat = function () {
     var randomMeat = pizzaIngredients.meats[Math.floor((Math.random() * pizzaIngredients.meats.length))];
     return randomMeat;
@@ -334,11 +360,11 @@ var makeRandomPizza = function () {
 
 // returns a DOM element for each pizza
 var pizzaElementGenerator = function (i) {
-    var pizzaContainer,
-        pizzaImageContainer,
-        pizzaImage,
-        pizzaDescriptionContainer,
-        pizzaName,
+    var pizzaContainer, // contains pizza title, image and list of ingredients
+        pizzaImageContainer, // contains the pizza image
+        pizzaImage, // the pizza image itself
+        pizzaDescriptionContainer, // contains the pizza title and list of ingredients
+        pizzaName, // the pizza name itself
         ul; // the list of ingredients
 
     pizzaContainer = document.createElement("div");
@@ -372,9 +398,11 @@ var pizzaElementGenerator = function (i) {
     return pizzaContainer;
 }
 
+// resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function (size) {
     window.performance.mark("mark_start_resize"); // User Timing API function
 
+    // Changes the value for the size of the pizza above the slider
     function changeSliderLabel(size) {
         switch (size) {
         case "1":
@@ -399,6 +427,8 @@ var resizePizzas = function (size) {
         var windowwidth = document.querySelector("#randomPizzas").offsetWidth;
         var oldsize = oldwidth / windowwidth;
 
+        // TODO: change to 3 sizes? no more xl?
+        // Changes the slider value to a percent width
         function sizeSwitcher(size) {
             switch (size) {
             case "1":
@@ -418,17 +448,19 @@ var resizePizzas = function (size) {
         return dx;
     }
 
-    function changePizzaSizes(size) {
-        for (var i = 0, len = document.querySelectorAll(".randomPizzaContainer").length; i < len; i++) {
-            var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-            var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-            document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-        }
+    // Iterates through pizza elements on the page and changes their widths
+  function changePizzaSizes(size) {
+      var dx = determineDx(document.querySelector(".randomPizzaContainer"), size);
+      var newwidth = (document.querySelector(".randomPizzaContainer").offsetWidth + dx) + 'px';
+      var elements = document.querySelectorAll(".randomPizzaContainer");
+    for (var i = elements.length; i--;) {
+      elements[i].style.width = newwidth;
     }
+  }
 
     changePizzaSizes(size);
 
-    // User Timing API
+    // User Timing API is awesome
     window.performance.mark("mark_end_resize");
     window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
     var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
@@ -437,21 +469,25 @@ var resizePizzas = function (size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
-// Creates and appends pizzas on page load
+// This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
     var pizzasDiv = document.getElementById("randomPizzas");
     pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
+// User Timing API again. These measurements tell you how long it took to generate the initial pizzas
 window.performance.mark("mark_end_generating");
 window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
 var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
 console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
 
+// Iterator for number of times the pizzas in the background have scrolled.
+// Used by updatePositions() to decide when to log the average time per frame
 var frame = 0;
 var items;
 
-function logAverageFrame(times) {
+// Logs the average amount of time per 10 frames needed to move the sliding background pizzas on scroll.
+function logAverageFrame(times) { // times is the array of User Timing measurements from updatePositions()
     var numberOfEntries = times.length;
     var sum = 0;
     for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
@@ -470,7 +506,9 @@ function updatePositions() {
 
     for (var i = 0; i < itemsLen; i++) {
         var phase = Math.sin((lastScrollY / 1250) + (i % 5));
-        // Replaced update left with translateX.
+        // Instead of updating left property of each element, use translateX.
+        // Updating left property requires composite, paint, and layout.
+        // TranslateX only requires composite, so it is much more efficient.
         items[i].style.WebkitTransform = "translateX(" + 100 * phase + "px)";
         items[i].style.MozTransform = "translateX(" + 100 * phase + "px)";
         items[i].style.msTransform = "translateX(" + 100 * phase + "px)";
@@ -478,6 +516,8 @@ function updatePositions() {
         items[i].style.transform = "translateX(" + 100 * phase + "px)";
     }
 
+    // User Timing API to the rescue again. Seriously, it's worth learning.
+    // Super easy to create custom metrics.
     window.performance.mark("mark_end_frame");
     window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
     if (frame % 10 === 0) {
@@ -486,6 +526,7 @@ function updatePositions() {
     }
 }
 
+// Variable to hold the number of pixels the page is currently scrolled.
 var lastScrollY = 0;
 // Represents whether or not the positions of the pizzas are being updated.
 // True if the pizzas are being updated, false otherwise.
@@ -499,40 +540,53 @@ function onScroll() {
     requestTick();
 }
 
-// Function that checks if the pizza positions are updating.
+// Function that checks if the pizza positions are updating.  If not, requests
+// an animation frame so the pizzas can update at the best time for the browser.
+// Doesn't run if pizzas are already updating to prevent unnecessary use of
+// computer's resources that could reduce performance.
 function requestTick() {
     if (!ticking) {
         requestAnimationFrame(update);
-        // Sets update property to true
+        // Let other functions know the update is happening.
         ticking = true;
     }
 }
 
+// Updates the positions of the pizzas and updates the ticking variable
+// so other functions know the update is finished.
 function update() {
     updatePositions();
-    // Done with updating to ticking is false
     ticking = false;
 }
 
 window.addEventListener('scroll', onScroll, false);
 
-// Generates the sliding pizzas on pageload
+// Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function () {
     var cols = 8;
     var s = 256;
     // Instead of creating 200 pizzas, only create the number of pizzas
     // Needed based on the screen size.
+
+    // Stop making new pizza elements when the elements are being created
+    // off the bottom of the screen.
     for (var j = 0, height = window.screen.height; j < height; j += s) {
+        // Create pizzas at intervals of s (256) pixels until the end of the
+        // screen is reached.
         for (var i = 0, width = window.screen.width; i < width; i += s) {
             var elem = document.createElement('img');
             elem.className = 'mover';
-            elem.src = "images/pizza.png";
+            elem.src = "build/pizza.png";
             elem.style.left = i + 'px';
             elem.style.top = j + 'px';
             document.querySelector("#movingPizzas1").appendChild(elem);
         }
     }
+    // List of mover elements is not changing, so store it in a variable instead
+    // of recalculating each time you need to use it.
     items = document.querySelectorAll('.mover');
+    // Store length of list as well.  Now no need to calculate on each call
+    // of updatePositions or each pass through the for loop.
     itemsLen = items.length;
     updatePositions();
 });

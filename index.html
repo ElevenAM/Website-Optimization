@@ -1,71 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content=" Framerate Challenge ">
-    <meta name="author" content=" Liam Nguyen ">
-    <title>Cameron Pittman: Portfolio</title>
 
-    <!-- Hmm, what is the impact of web fonts on speed? Measure it... -->
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Website Performance Optimization">
+  <meta name="author" content="Ben Halperin">
+  <title>Cameron Pittman: Portfolio</title>
 
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/print.css" rel="stylesheet">
+  <!-- Hmm, what is the impact of web fonts on speed? Measure it... -->
+  <!--<link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">-->
+  
+  <!--I added the print media query this css link so it won't block rendering.
+  The page doesn't need it until the user wants to print, so it can wait until
+  the page loads.-->
+  <link href="build/print.min.css" rel="stylesheet" media="print">
+  <!--Added async tag to google analytics script because it is a third-party
+  script that doesn't impact the DOM.  It should not block the rendering path-->
+  <script async src="http://www.google-analytics.com/analytics.js"></script>
+  <!--I inlined several styles that I thought were most critical.  These styles
+  make sure the content fits on the screen, and gives the page the same over all
+  layout as it has when the full css file is loaded.-->
+  <style>
+    header,
+    footer,
+    .container {
+      max-width: 45em;
+      margin: 0 auto;
+    }
+    header img {
+      float: left;
+    }
+    header p {
+      font-size: 1.5em;
+      font-weight: bold;
+      padding-left: 4em;
+    }
+    .content li {
+      list-style-type: none;
+    }
+    img {
+      border: 0;
+      max-width: 100%;
+    }
+  </style>
+</head>
 
-    <script>
-      (function(w,g){w['GoogleAnalyticsObject']=g;
-      w[g]=w[g]||function(){(w[g].q=w[g].q||[]).push(arguments)};w[g].l=1*new Date();})(window,'ga');
+<body>
+  <header>
+    <a href="/">
+      <img src="build/profilepic.jpg">
+    </a>
+    <p>Cameron Pittman
+      <br><span>Course Developer</span>
+    </p>
+  </header>
 
-      // TODO: replace with your Google Analytics profile ID.
-      ga('create', 'UA-XXXX-Y');
-      ga('send', 'pageview');
-    </script>
-    <script src="http://www.google-analytics.com/analytics.js"></script>
-    <script async src="js/perfmatters.js"></script>
-  </head>
+  <div class="container">
+    <div class="hero">
+      <strong>I love web development!</strong> This is a template for a simple portfolio. I decided to use it to showcase a few Udacity courses I've taken and some teaching work, but you can use it to showcase any kind of project that you want the world to see :)
+      <br>Contact me: me@email.com
+    </div>
 
-  <body>
-    <header>
-      <a href="/"><img src="img/profilepic.jpg"></a>
-      <p>Cameron Pittman<br><span>Course Developer</span></p>
-    </header>
+    <div class="content">
+      <ul>
+        <li>
+          <img src="build/2048-small.jpg">
+          <a href="project-2048.html">Build Your Own 2048!</a>
+          <p>I made my own version of 2048. How cool is that!?</p>
+        </li>
 
-    <div class="container">
-      <div class="hero">
-        <strong>I love web development!</strong> This is a template for a simple portfolio. I decided to use it to showcase a few Udacity courses I've taken and some teaching work, but you can use it to showcase any kind of project that you want the world to see :) <br> Contact me: me@email.com
-      </div>
+        <li>
+          <img src="build/website-optimization.jpg">
+          <a href="project-webperf.html">Website Performance Optimization</a>
+          <p>Hey... this class looks familiar.</p>
+        </li>
 
-      <div class="content">
-        <ul>
-          <li>
-            <img src="https://lh4.ggpht.com/kJEnfqhPvtm4m3EneSZ4fWYGS8lW4YNhEjk6zPkyrQaBUHc-2Y_ElDic99NHI0h-UBLXVbRCjFybFvrWxdk=s100">
-            <a href="project-2048.html">Build Your Own 2048!</a>
-            <p>I made my own version of 2048. How cool is that!?</p>
-          </li>
+        <li>
+          <img src="build/devices.jpg">
+          <a href="project-mobile.html">Mobile Web Development</a>
+          <p>Making mobile apps isn't so hard after all.</p>
+        </li>
 
-          <li>
-            <img src="https://lh6.ggpht.com/f_0W8h__3G99CWTjnMjD8BUKm7yp2-wJyApLtTwFoFtlal2ULf_JgHIsOQq2NiYfKOdMlXlMHDKNo5XVZLs=s100">
-            <a href="project-webperf.html">Website Performance Optimization</a>
-            <p>Hey... this class looks familiar.</p>
-          </li>
-
-          <li>
-            <img src="https://lh5.ggpht.com/IKdCmTWn8a2nMhlwMYzryvzRN5CUZAOBr4tDrEAbszV7TIFe9pRAInA4kkYcgTXwrifJsBEsq1agTueuu-g=s100">
-            <a href="project-mobile.html">Mobile Web Development</a>
-            <p>Making mobile apps isn't so hard after all.</p>
-          </li>
-
-          <li>
-            <img style="width: 100px;" src="views/images/pizzeria.jpg">
-            <a href="views/pizza.html">Cam's Pizzeria</a>
-            <p>Who wants a performant pizza?</p>
-          </li>
-        </ul>
+        <li>
+          <img src="views/images/pizzeria-small.jpg">
+          <a href="views/pizza.html">Cam's Pizzeria</a>
+          <p>Who wants a performant pizza?</p>
+        </li>
+      </ul>
     </div>
 
     <footer>
-      <p>&copy; Web Performance 2014 <span id="crp-stats"></span></p>
+      <p>&copy; Web Performance 2014 <span id="crp-stats"></span>
+      </p>
     </footer>
-  </body>
+  </div>
+  <!--I moved the google analytics script to a separate file and created a new
+  loadCSS javascript file that (as the name suggests) loads a css file into the
+  html document.  I combined these files with the perfmatters.js file and put
+  the combined file at the bottom of the body so it won't block the rendering
+  path-->
+  <script src="build/combined.min.js"></script>
+</body>
+
 </html>

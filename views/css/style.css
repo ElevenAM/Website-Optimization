@@ -29,10 +29,17 @@ form {
   font-weight: 800;
 }
 
+/**
+* I noticed the position: fixed property of the mover class was causing
+* the entire page to repaint on scroll.  After some internet searching,
+* I found that adding backface-visibility: hidden is a fix.  I don't know if
+* this is a legitimate solution or a "hack" but it did help by putting
+* the pizzas on a separate layer.
+*/
 .mover {
   position: fixed;
-  backface-visibility: hidden;
   z-index: -1;
+  backface-visibility: hidden;
 }
 
 .randomPizzaContainer {
